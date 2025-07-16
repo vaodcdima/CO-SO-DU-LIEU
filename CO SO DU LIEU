@@ -1,0 +1,107 @@
+CREATE DATABASE QuanLyBanThucPham;
+GO
+
+USE QuanLyBanThucPham;
+GO
+
+CREATE TABLE NhanVien (
+    MaNhanVien VARCHAR(10) PRIMARY KEY,
+    TenNhanVien NVARCHAR(50),
+    SoDienThoai VARCHAR(15),
+    NgaySinh DATE,
+    ChucVu NVARCHAR(30)
+);
+GO
+
+CREATE TABLE KhachHang (
+    MaKhachHang VARCHAR(10) PRIMARY KEY,
+    TenKhachHang NVARCHAR(50),
+    SoDienThoai VARCHAR(15),
+    Email VARCHAR(100)
+);
+GO
+
+CREATE TABLE DanhMucThucPham (
+    MaDanhMuc VARCHAR(10) PRIMARY KEY,
+    TenDanhMuc NVARCHAR(50)
+);
+GO
+
+CREATE TABLE DoAn (
+    MaMon VARCHAR(10) PRIMARY KEY,
+    TenMon NVARCHAR(50),
+    DonGia DECIMAL(10, 2),
+    MaDanhMuc VARCHAR(10),
+    FOREIGN KEY (MaDanhMuc) REFERENCES DanhMucThucPham(MaDanhMuc)
+);
+GO
+
+CREATE TABLE HoaDon (
+    MaHoaDon VARCHAR(10) PRIMARY KEY,
+    NgayLap DATE,
+    MaNhanVien VARCHAR(10),
+    MaKhachHang VARCHAR(10),
+    FOREIGN KEY (MaNhanVien) REFERENCES NhanVien(MaNhanVien),
+    FOREIGN KEY (MaKhachHang) REFERENCES KhachHang(MaKhachHang)
+);
+GO
+
+CREATE TABLE ThongTinHoaDon (
+    MaHoaDon VARCHAR(10),
+    MaMon VARCHAR(10),
+    SoLuong INT,
+    DonGia DECIMAL(10, 2),
+    PRIMARY KEY (MaHoaDon, MaMon),
+    FOREIGN KEY (MaHoaDon) REFERENCES HoaDon(MaHoaDon),
+    FOREIGN KEY (MaMon) REFERENCES DoAn(MaMon)
+);
+GO
+
+INSERT INTO NhanVien VALUES 
+('NV01', N'Nguyễn Văn A', '0901123456', '1990-05-10', N'Quản lý'),
+('NV02', N'Lê Thị B', '0902123456', '1995-08-15', N'Nhân viên'),
+('NV03', N'Trần Văn C', '0903123456', '1992-03-20', N'Nhân viên');
+
+INSERT INTO KhachHang VALUES 
+('KH01', N'Phạm Minh D', '0912345678', 'minhd@gmail.com'),
+('KH02', N'Hoàng Lan E', '0987654321', 'lan.e@gmail.com');
+
+INSERT INTO DanhMucThucPham VALUES 
+('DM01', N'Món chính'),
+('DM02', N'Tráng miệng');
+
+INSERT INTO DoAn VALUES 
+('MA01', N'Cơm gà', 45000, 'DM01'),
+('MA02', N'Bún bò', 40000, 'DM01'),
+('MA03', N'Chè khúc bạch', 30000, 'DM02'),
+('MA04', N'Kem dừa', 25000, 'DM02');
+
+INSERT INTO HoaDon VALUES 
+('HD01', '2025-07-15', 'NV01', 'KH01'),
+('HD02', '2025-07-16', 'NV02', 'KH02');
+
+INSERT INTO ThongTinHoaDon VALUES 
+('HD01', 'MA01', 2, 45000),
+('HD01', 'MA03', 1, 30000),
+('HD02', 'MA02', 1, 40000),
+('HD02', 'MA04', 2, 25000);
+
+SELECT * FROM DoAn;
+
+SELECT MaHoaDon, MaMon, SoLuong, DonGia FROM ThongTinHoaDon;
+
+SELECT MaHoaDon, NgayLap FROM HoaDon WHERE MaKhachHang = 'KH01';
+
+SELECT TenNhanVien, ChucVu, NgaySinh FROM NhanVien;
+
+
+
+
+
+
+
+
+
+
+
+
